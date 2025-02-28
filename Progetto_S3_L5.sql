@@ -220,28 +220,40 @@ LEFT JOIN
 Verbale AS Ve ON A.idanagrafica = Ve.idanagrafica
 Group by A.Codice_Fiscale,A.Cognome, A.Nome;
 --8. Visualizzazione di tutti gli anagrafici residenti a Palermo, 
-SELECT * FROM Anagrafica WHERE Citta = 'Palermo'
+SELECT * FROM Anagrafica WHERE Citta = 'Palermo';
 
 --9. Query che visualizzi Data violazione, Importo e decurtamento punti relativi ad una certa data, 
 SELECT DataViolazione , Importo, DecurtamentoPunti 
 FROM Verbale
-WHERE DataViolazione = '2024-05-12' --data formato aaaa-mm-gg
+WHERE DataViolazione = '2024-05-12'; --data formato aaaa-mm-gg
 
 --10. Conteggio delle violazioni contestate raggruppate per Nominativo dell’agente di Polizia
 SELECT NominativoAgente, Count(idverbale) as numeroViolazioni
 From Verbale 
-Group BY NominativoAgente
+Group BY NominativoAgente;
 
 --11. Cognome, Nome, Indirizzo, Data violazione, Importo e punti decurtati per tutte le violazioni che superino il decurtamento di 5 punti, 
 SELECT A.Cognome, A.Nome,Ve.IndirizzoViolazione, Ve.DataViolazione,  Ve.Importo, ve.DecurtamentoPunti
 FROM Anagrafica as A
 INNER JOIN
 Verbale as Ve On A.idanagrafica = Ve.idanagrafica
-WHERE ve.DecurtamentoPunti > 5
+WHERE ve.DecurtamentoPunti > 5;
 
 --12. Cognome, Nome, Indirizzo, Data violazione, Importo e punti decurtati per tutte le violazioni che superino l’importo di 400 euro.  --Non ci sono record con 400 puo essere verificato con un importo minore
 SELECT A.Cognome, A.Nome, Ve.IndirizzoViolazione, Ve.DataViolazione,  Ve.Importo, ve.DecurtamentoPunti
 FROM Anagrafica as A
 INNER JOIN
 Verbale as Ve On A.idanagrafica = Ve.idanagrafica
-WHERE Ve.Importo > 400.00
+WHERE Ve.Importo > 400.00;
+
+--Query 13 - Numero di verbali e importo totale delle multe emesse per ogni agente di polizia
+SELECT NominativoAgente, Count(idVerbale)as NumeroVerbali , Sum(Importo) As ImportoTotale
+FROM Verbale
+GROUP BY NominativoAgente;
+
+--Query 14 - Media degli importi delle multe per tipo di violazione
+Select Vi.Descrizione, AVG(Ve.Importo) as Media_Importi_Multe
+FROM Verbale AS Ve
+INNER JOIN
+Violazione As Vi On Ve.idviolazione = Vi.idviolazione
+GROUP BY Vi.Descrizione;

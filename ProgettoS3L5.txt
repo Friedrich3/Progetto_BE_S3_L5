@@ -245,3 +245,16 @@ FROM Anagrafica as A
 INNER JOIN
 Verbale as Ve On A.idanagrafica = Ve.idanagrafica
 WHERE Ve.Importo > 400.00
+
+
+--Query 13 - Numero di verbali e importo totale delle multe emesse per ogni agente di polizia
+SELECT NominativoAgente, Count(idVerbale)as NumeroVerbali , Sum(Importo) As ImportoTotale
+FROM Verbale
+GROUP BY NominativoAgente
+
+--Query 14 - Media degli importi delle multe per tipo di violazione
+Select Vi.Descrizione, AVG(Ve.Importo) as Media_Importi_Multe
+FROM Verbale AS Ve
+INNER JOIN
+Violazione As Vi On Ve.idviolazione = Vi.idviolazione
+GROUP BY Vi.Descrizione
